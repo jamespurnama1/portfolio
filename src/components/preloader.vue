@@ -1,34 +1,60 @@
 <template>
-<div id="preloader"></div>
+<div v-show="toggle" id="preloader" ref="preloader"></div>
 </template>
 
 <script>
 import SiriWave from 'siriwave';
 
-let p = 0;
-
-const siriWave = new SiriWave({
-  container: document.getElementById('preloader'),
-  autostart: true,
-  speed: 0.05,
-  amplitude: 0,
-  cover: true,
-});
-
 export default {
   name: 'preloader',
-  onload: () => {
-    setInterval(() => {
-      p += 0.01;
-      siriWave.setAmplitude(p);
-    }, 300);
+  data() {
+    return { siriWave: SiriWave, p: 0, toggle: true };
+  },
+  mounted() {
+    this.siriWave = this.initiate();
+    this.p = 0;
+    this.$nextTick(() => {
+      if (this.$refs.preloader) {
+        console.log('Now it does!');
+        this.loop();
+      }
+    });
+  },
+
+  methods: {
+    initiate() {
+      return new SiriWave({
+        container: document.getElementById('preloader'),
+        autostart: true,
+        speed: 0.05,
+        amplitude: 0,
+        cover: true,
+      });
+    },
+    loop() {
+      if (this.p < 1) {
+        setTimeout(() => {
+          this.p += 0.01;
+          this.siriWave.setAmplitude(this.p);
+          this.loop();
+        }, 300);
+      } else {
+        this.toggle = false;
+      }
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
 #preloader {
-  height: 100%;
-  width: 100%;
+  height: 150%;
+  width: 150%;
+  background: black;
+  position: fixed;
+  top: -25%;
+  left: -25%;
+  z-index: 1000;
+  overflow: hidden;
 }
 </style>
