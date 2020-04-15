@@ -1,4 +1,5 @@
 const path = require('path');
+// eslint-disable-next-line no-unused-vars
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -47,6 +48,10 @@ module.exports = {
       }],
     },
     {
+      test: /\.js$/,
+      loader: 'imports-loader?define=>false',
+    },
+    {
       test: require.resolve('jquery'),
       use: [{
         loader: 'expose-loader',
@@ -67,6 +72,7 @@ module.exports = {
       TimelineMax: path.resolve('node_modules', 'gsap/src/uncompressed/TimelineMax.js'),
       ScrollMagic: path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/ScrollMagic.js'),
       'animation.gsap': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap.js'),
+      ScrollMagicGSAP: 'scrollmagic/scrollmagic/uncompressed/plugins/animation.gsap',
       'debug.addIndicators': path.resolve('node_modules', 'scrollmagic/scrollmagic/uncompressed/plugins/debug.addIndicators.js'),
       vue$: 'vue/dist/vue.esm.js', // 'vue/dist/vue.common.js' for webpack 1
     },

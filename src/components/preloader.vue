@@ -37,7 +37,7 @@ export default {
           this.p += 0.01;
           this.siriWave.setAmplitude(this.p);
           this.loop();
-        }, 300);
+        }, 100);
       } else {
         this.toggle = false;
       }
