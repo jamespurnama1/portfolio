@@ -1,3 +1,4 @@
+/* eslint-disable */
 // import Modules
 import './style.scss';
 import $ from 'jquery';
