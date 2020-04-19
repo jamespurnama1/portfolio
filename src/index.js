@@ -13,16 +13,17 @@ window.jQuery = $;
 window.$ = $;
 import SiriWave from 'siriwave';
 // import HorizontalScroll from '@oberon-amsterdam/horizontal';
-import Scrollbar, { ScrollbarPlugin } from 'smooth-scrollbar';
-//gsap 2.1.3
+import Scrollbar, { ScrollbarPlugin, addIndicators } from 'smooth-scrollbar';
+// gsap 2.1.3
 import {
   TweenMax,
   TimelineMax,
   Linear
 } from "gsap/TweenMax";
+// import { gsap } from 'gsap';
 import ScrollMagic from 'scrollmagic';
-// import { ScrollScene } from 'scrollscene'
 import 'animation.gsap'
+// import { ScrollScene, ScrollMagic } from 'scrollscene'
 import 'lazysizes';
 //DEBUGGING!
 import 'debug.addIndicators'
@@ -30,27 +31,27 @@ import 'debug.addIndicators'
 /*--------------------
 Horizontal Scroll Plugin
 --------------------*/
-// class HorizontalScrollPlugin extends Scrollbar.ScrollbarPlugin {
-//   static pluginName = 'horizontalScroll';
+class HorizontalScrollPlugin extends Scrollbar.ScrollbarPlugin {
+  static pluginName = 'horizontalScroll';
 
-//   transformDelta(delta, fromEvent) {
-//     if (!/wheel/.test(fromEvent.type)) {
-//       return delta;
-//     }
-//     const { x, y } = delta; 
+  transformDelta(delta, fromEvent) {
+    if (!/wheel/.test(fromEvent.type)) {
+      return delta;
+    }
+    const { x, y } = delta; 
 
-//     return {
-//       y: 0,
-//       x: Math.abs(x) > Math.abs(y) ? x : y, };
-//     }
-//   }
-//   Scrollbar.use(HorizontalScrollPlugin);
-//   let option = {
-//     x: 0,
-//     speed: 1.5,
-//     limit: 2,
-//     time: 0.3,
-//   };
+    return {
+      y: 0,
+      x: Math.abs(x) > Math.abs(y) ? x : y, };
+    }
+  }
+  Scrollbar.use(HorizontalScrollPlugin);
+  let option = {
+    x: 0,
+    speed: 1.5,
+    limit: 2,
+    time: 0.3,
+  };
 
 /*--------------------
 Preloader
@@ -83,40 +84,40 @@ window.lazySizesConfig = window.lazySizesConfig || {};
 // };
 $('.lazy-others').addClass('jtc');
 
-window.onload = function() {
-
 /*--------------------
 Check jQuery DEBUGGING!
 --------------------*/
-  if (window.jQuery) {
-    // jQuery is loaded
-    console.log("jQuery is loaded.");
-  } else {
-    // jQuery is not loaded
-    console.error("jQuery is not present.");
-  };
+if (window.jQuery) {
+  // jQuery is loaded
+  console.log("jQuery is loaded.");
+} else {
+  // jQuery is not loaded
+  console.error("jQuery is not present.");
+};
 
 /*--------------------
 Check UserAgent DEBUGGING!
 --------------------*/
-  navigator.sayswho = (function() {
-    var ua = navigator.userAgent,
-      tem,
-      M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
-    if (/trident/i.test(M[1])) {
-      tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
-      return 'IE ' + (tem[1] || '');
-    }
-    if (M[1] === 'Chrome') {
-      tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
-      if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
-    }
-    M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
-    if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
-    return M.join(' ');
-  })();
-  const isChrome = /Chrome /.test(navigator.sayswho);
-  console.log(navigator.sayswho, "Chrome?", isChrome);
+navigator.sayswho = (function() {
+  var ua = navigator.userAgent,
+    tem,
+    M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
+  if (/trident/i.test(M[1])) {
+    tem = /\brv[ :]+(\d+)/g.exec(ua) || [];
+    return 'IE ' + (tem[1] || '');
+  }
+  if (M[1] === 'Chrome') {
+    tem = ua.match(/\b(OPR|Edge)\/(\d+)/);
+    if (tem != null) return tem.slice(1).join(' ').replace('OPR', 'Opera');
+  }
+  M = M[2] ? [M[1], M[2]] : [navigator.appName, navigator.appVersion, '-?'];
+  if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
+  return M.join(' ');
+})();
+const isChrome = /Chrome /.test(navigator.sayswho);
+console.log(navigator.sayswho, "Chrome?", isChrome);
+
+$(document).ready(function() {
 
   // Check if mobile
   function isMobile() {
@@ -148,9 +149,9 @@ Custom Cursor
     };
     var ratio = 0.7;
     var active = false;
-    var ball = document.getElementById("ball");
+    let ball = document.getElementById('ball');
 
-    TweenLite.set(ball, {
+    TweenLite.set('#ball', {
       xPercent: -50,
       yPercent: -50
     });
@@ -176,7 +177,7 @@ Custom Cursor
         pos.x += (mouse.x - pos.x) * ratio;
         pos.y += (mouse.y - pos.y) * ratio;
 
-        TweenLite.set(ball, {
+        TweenLite.set("#ball", {
           x: pos.x,
           y: pos.y
         });
@@ -209,53 +210,53 @@ Magnet Cursor
        active = false;
     });
 
-    //#icon-wrap-works
-    $("#icon-wrap-works").mouseenter(function(e) {
-      TweenMax.to(ball, 0.3, {
-        scale: 4
-      });
-      active = true;
-      // $("#works").css("color","black");
-    });
+    // //#icon-wrap-works
+    // $("#icon-wrap-works").mouseenter(function(e) {
+    //   TweenMax.to(ball, 0.3, {
+    //     scale: 4
+    //   });
+    //   active = true;
+    //   // $("#works").css("color","black");
+    // });
 
-    $("#icon-wrap-works").mouseleave(function(e) {
-      TweenMax.to(this, 0.3, {
-        scale: 1
-      });
-      TweenMax.to(ball, 0.3, {
-        scale: 1
-      });
-      TweenMax.to(this.querySelector("#works"), 0.3, {
-        x: 0,
-        y: 0
-      });
-      active = false;
-      // $("#works").css("color","white");
-    });
+    // $("#icon-wrap-works").mouseleave(function(e) {
+    //   TweenMax.to(this, 0.3, {
+    //     scale: 1
+    //   });
+    //   TweenMax.to(ball, 0.3, {
+    //     scale: 1
+    //   });
+    //   TweenMax.to(this.querySelector("#works"), 0.3, {
+    //     x: 0,
+    //     y: 0
+    //   });
+    //   active = false;
+    //   // $("#works").css("color","white");
+    // });
 
-    //#icon-wrap-contact
-    $("#icon-wrap-contact").mouseenter(function(e) {
-      TweenMax.to(ball, 0.3, {
-        scale: 4
-      });
-      active = true;
-      // $("#contact").css("color","black");
-    });
+    // //#icon-wrap-contact
+    // $("#icon-wrap-contact").mouseenter(function(e) {
+    //   TweenMax.to(ball, 0.3, {
+    //     scale: 4
+    //   });
+    //   active = true;
+    //   // $("#contact").css("color","black");
+    // });
 
-    $("#icon-wrap-contact").mouseleave(function(e) {
-      TweenMax.to(this, 0.3, {
-        scale: 1
-      });
-      TweenMax.to(ball, 0.3, {
-        scale: 1
-      });
-      TweenMax.to(this.querySelector("#contact"), 0.3, {
-        x: 0,
-        y: 0
-      });
-      active = false;
-      // $("#contact").css("color","white");
-    });
+    // $("#icon-wrap-contact").mouseleave(function(e) {
+    //   TweenMax.to(this, 0.3, {
+    //     scale: 1
+    //   });
+    //   TweenMax.to(ball, 0.3, {
+    //     scale: 1
+    //   });
+    //   TweenMax.to(this.querySelector("#contact"), 0.3, {
+    //     x: 0,
+    //     y: 0
+    //   });
+    //   active = false;
+    //   // $("#contact").css("color","white");
+    // });
 
     $(".icon-wrap").mousemove(function(e) {
       parallaxCursor(e, this, 3);
@@ -447,10 +448,11 @@ Three.js Canvas
 ScrollMagic & GSAP
 --------------------*/
   var controller = new ScrollMagic.Controller({
-    // refreshInterval: 0,
-    vertical: false
-    // loglevel: 3 DEBUGGING!
+    refreshInterval: 0,
+    vertical: false,
+    loglevel: 3 //DEBUGGING!
   })
+
   var images = [
     "jtc__image--1",
     "jtc__image--2",
@@ -531,10 +533,13 @@ ScrollMagic & GSAP
     "accha__image--17",
     "accha__image--18"
   ];
+  let scenes = [];
+  let x = 0;
 
   var obj = {
     curImg: 0
   };
+
   var tween = TweenMax.to(obj, 0.5, {
     curImg: images.length - 1,
     roundProps: "curImg",
@@ -549,28 +554,47 @@ ScrollMagic & GSAP
       document.getElementById(images[obj.curImg]).style.visibility = 'visible';
     }
   });
-  var imagesScene = new ScrollMagic.Scene({
-      triggerElement: "#trigger",
-      duration: "480%",
-      offset: 320
-      // loglevel: 3 //DEBUGGING!
-    })
-    .setTween(tween)
-    .setClassToggle(".reveal", "visible")
-    .addIndicators() //DEBUGGING!
-    .addTo(controller);
+  scenes.push(new ScrollMagic.Scene({
+    triggerElement: "#trigger",
+    duration: "480%"
+  })
+  .setTween(tween)
+  .setClassToggle(".reveal", "visible")
+  .addIndicators() //DEBUGGING!
+  .addTo(controller)
+  );
 
+  //chrome optimization
+  if(isChrome){
+    controller.scrollPos(function () {
+      return x;
+    });
+  }
 /*--------------------
 Smooth Scrollbar
 --------------------*/
-// // intialize scrollbar
-// var scrollbar = Scrollbar.init(document.querySelector('#container'))
+// intialize scrollbar
+let scrollbar = Scrollbar.init(document.querySelector('#smoothscrollbar'), {damping: '0.2'});
 
-// // add listener to refresh the scene manually
+// add listener to refresh the scene manually
 // scrollbar.addListener(() => {
-//   scene.refresh()
+//   imagesScene.refresh()
 // })
 
+  // listener smooth-scrollbar, update controller
+scrollbar.addListener(function(status) {
+
+  x = status.offset.x;
+  
+  if(isChrome){ 
+    controller.update();
+  } else {
+    scenes.forEach(function(scene){
+           scene.refresh();       
+    });
+  }
+  
+});
 /*--------------------
 Remove Preloader
 --------------------*/
@@ -579,4 +603,4 @@ Remove Preloader
       $(this).remove();
     })
   }, 3000);
-}; //end of 'on.load'
+}); //end of 'on.load'
