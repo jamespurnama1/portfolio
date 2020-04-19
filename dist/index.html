@@ -1,175 +1,189 @@
 <!doctype html>
 <html lang="en">
-<html>
 
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<title>james henry</title>
-	<link rel="icon" href="img/favicon.ico"
+	<meta name="description" content="James Henry, Graphic Designer. A portfolio.">
+	<link rel="icon" href="img/favicon.ico">
 </head>
 
 <body>
-	<script src="main.js"></script>
-	<div id="magic-cursor">
-		<div id="ball"></div>
-	</div>
-	<header>
-		<div class="icon-wrap">
-		<a class="button-text button-icon" id="works" href="https://www.behance.net/jamespurnama" target="_blank"><span data-hover="bēhance">works</span></a>
-	</div>
-	<div class="icon-wrap">
-		<a class="button-text button-icon" id="contact" href="mailto:jamespurnama1@gmail.com"><span data-hover="e-mail">contact</span></a>
-	</div>
-	</header>
+	<div id="preloader"></div>
+	<div id="threejs"></div>
+	<div id="container">
+		<div id="content">
+			<script src="main.js"></script>
+			<script id="vertexShader" type="x-shader/x-vertex">
+				varying vec2 a;void main(){a=vec2(uv.x,1.-uv.y);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1);}
+		</script>
+			<script id="fragmentShader" type="x-shader/x-fragment">
+				uniform vec2 resolution;uniform float time,slider;precision lowp float;const float b=3.141592654;vec2 s(vec2 d){d=vec2(dot(d,vec2(127.1,311.7)),dot(d,vec2(269.5,183.3)));return -1.+2.*fract(sin(d)*43758.5453123);}float t(in vec2 d){const float e=.366025404;const float f=.211324865;vec2 g,h,i,j,k;g=floor(d+(d.x+d.y)*e);h=d-g+(g.x+g.y)*f;i=h.x>h.y?vec2(1,0):vec2(0,1);j=h-i+f;k=h-1.+2.*f;vec3 l,m;l=max(.5-vec3(dot(h,h),dot(j,j),dot(k,k)),0.);m=l*l*l*l*vec3(dot(h,s(g+0.)),dot(j,s(g+i)),dot(k,s(g+1.)));return dot(m,vec3(70));}const mat2 c=mat2(.8,.6,-.6,.8);float u(in vec2 d){float e=0.;e+=.5*t(d);d=c*d*2.02;e+=.25*t(d);d=c*d*2.03;e+=.125*t(d);d=c*d*2.01;e+=.0625*t(d);return e;}mat4 v(in float d,in float e,in float f,in float g){mat4 c=mat4(0);float h,i;h=d/180.*b;i=1./tan(h*.5);c[0][0]=i/e;c[1][1]=i;c[2][2]=(g+f)/(f-g);c[2][3]=-1.;c[3][2]=2.*g*f/(f-g);return c;}mat4 w(vec3 d,float e){float f,g;f=cos(e);g=sin(e);vec3 h,i,j;h=vec3(1,0,0);i=vec3(0,f,g);j=vec3(0,-g,f);mat4 k=mat4(h.x,i.x,j.x,0,h.y,i.y,j.y,0,h.z,i.z,j.z,0,-dot(h,d),-dot(i,d),-dot(j,d),1);return k;}void main(){vec2 d=2.*gl_FragCoord.xy/resolution.xy-1.;d.x*=resolution.x/resolution.y;vec3 e,i,j;e=vec3(0,.25,-1.);mat4 f,g,h;f=v(80.,resolution.x/resolution.y,.1,10.);g=w(e,-5.*b/180.);h=g*f;i=vec3(0);j=vec3(0);if(d.y>-.55&&d.y<.4){float k,m,n,o,p,q;vec4 l=vec4(0);m=-resolution.y;n=.15*time;o=-.2;p=.5;q=.03;for(int r=0;r<16;++r){l=vec4(d.x,.5*u(.5*vec2(e.x+d.x,p+n)),e.z+p,1);o=(h*l).y-d.y;if(o>m){k=abs(o);if(k<.0025){i=vec3(smoothstep(1.,0.,k*333.));i*=exp(-.3*float(r));j+=i;}}p+=q;}i=sqrt(clamp(j,0.,1.));}gl_FragColor=vec4(i,1);}
+		</script>
+			<div id="magic-cursor">
+				<div id="ball">
+					<svg height="40" width="40">
+					<circle cx="20" cy="20" r="20" stroke-width="0"></circle>
+				</svg>
+			</div>
+			</div>
+			<header>
+				<div id="icon-wrap-works">
+					<a class="button-text button-icon" id="works" href="https://www.behance.net/jamespurnama" target="_blank"><span data-hover="bēhance">works</span></a>
+				</div>
+				<div id="icon-wrap-contact">
+					<a class="button-text button-icon" id="contact" href="mailto:jamespurnama1@gmail.com"><span data-hover="e-mail">contact</span></a>
+				</div>
+			</header>
 
-	<div class="block" id="start">
-		<h1>james henry</h1>
-	</div>
-	<div id="trigger"></div>
-	<div class="block">
-		<div class="icon-wrap">
-			<a class="button-icon" href="jacktheclipper.html">
-			jack the clipper
-		</a>
-	</div>
-	</div>
-	<div class="reveal tilt">
-		<img data-src="img/jtc1.jpg" class="jtc lazyload" id="jtc__image--1" alt="Jack The Clipper" />
-		<img data-src="img/jtc2.jpg" class="jtc lazyload" id="jtc__image--2" alt="Jack The Clipper" />
-		<img data-src="img/jtc3.jpg" class="jtc lazyload" id="jtc__image--3" alt="Jack The Clipper" />
-		<img data-src="img/jtc4.jpg" class="jtc lazyload" id="jtc__image--4" alt="Jack The Clipper" />
-		<img data-src="img/jtc5.jpg" class="jtc lazyload" id="jtc__image--5" alt="Jack The Clipper" />
-		<img data-src="img/jtc6.jpg" class="jtc lazyload" id="jtc__image--6" alt="Jack The Clipper" />
-		<img data-src="img/jtc7.jpg" class="jtc lazyload" id="jtc__image--7" alt="Jack The Clipper" />
-		<img data-src="img/jtc8.jpg" class="jtc lazyload" id="jtc__image--8" alt="Jack The Clipper" />
-		<img data-src="img/jtc9.jpg" class="jtc lazyload" id="jtc__image--9" alt="Jack The Clipper" />
-	</div>
-
-	<div id="trigger2"></div>
-	<div class="block">
-		<div class="icon-wrap">
-		<a class="button-icon" href="sagoo.html">
-			sagoo
-		</a>
 		</div>
-	</div>
-	<div class="reveal2 tilt">
-		<img data-src="img/sagoo1.jpg" class="sagoo lazyload" id="sagoo__image--1" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo2.jpg" class="sagoo lazyload" id="sagoo__image--2" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo3.jpg" class="sagoo lazyload" id="sagoo__image--3" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo4.jpg" class="sagoo lazyload" id="sagoo__image--4" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo5.jpg" class="sagoo lazyload" id="sagoo__image--5" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo6.jpg" class="sagoo lazyload" id="sagoo__image--6" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo7.jpg" class="sagoo lazyload" id="sagoo__image--7" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo8.jpg" class="sagoo lazyload" id="sagoo__image--8" alt="Sagoo Restaurant Bandung" />
-		<img data-src="img/sagoo9.jpg" class="sagoo lazyload" id="sagoo__image--9" alt="Sagoo Restaurant Bandung" />
-	</div>
 
-	<div id="trigger3"></div>
-	<div class="block">
-		<div class="icon-wrap">
-		<a class="button-icon" href="tremors.html">
-			tremors
-		</a>
+		<div class="block visible" id="start">
+			<h1>james<br>&emsp14;henry</h1>
+			<p>meet your multi-talented graphic designer based in malaysia.
+				<br>i can do branding, packaging, ui/ux, and a whole lot more.</p>
 		</div>
-	</div>
-	<div class="reveal3 tilt">
-		<img data-src="img/tremors1.jpg" class="tremors lazyload" id="tremors__image--1" alt="Tremors Photography" />
-		<img data-src="img/tremors2.jpg" class="tremors lazyload" id="tremors__image--2" alt="Tremors Photography" />
-		<img data-src="img/tremors3.jpg" class="tremors lazyload" id="tremors__image--3" alt="Tremors Photography" />
-		<img data-src="img/tremors4.jpg" class="tremors lazyload" id="tremors__image--4" alt="Tremors Photography" />
-		<img data-src="img/tremors5.jpg" class="tremors lazyload" id="tremors__image--5" alt="Tremors Photography" />
-		<img data-src="img/tremors6.jpg" class="tremors lazyload" id="tremors__image--6" alt="Tremors Photography" />
-		<img data-src="img/tremors7.jpg" class="tremors lazyload" id="tremors__image--7" alt="Tremors Photography" />
-		<img data-src="img/tremors8.jpg" class="tremors lazyload" id="tremors__image--8" alt="Tremors Photography" />
-		<img data-src="img/tremors9.jpg" class="tremors lazyload" id="tremors__image--9" alt="Tremors Photography" />
-		<img data-src="img/tremors10.jpg" class="tremors lazyload" id="tremors__image--10" alt="Tremors Photography" />
-		<img data-src="img/tremors11.jpg" class="tremors lazyload" id="tremors__image--11" alt="Tremors Photography" />
-		<img data-src="img/tremors12.jpg" class="tremors lazyload" id="tremors__image--12" alt="Tremors Photography" />
-		<img data-src="img/tremors13.jpg" class="tremors lazyload" id="tremors__image--13" alt="Tremors Photography" />
-		<img data-src="img/tremors14.jpg" class="tremors lazyload" id="tremors__image--14" alt="Tremors Photography" />
-	</div>
-
-	<div id="trigger4"></div>
-	<div class="block">
-		<div class="icon-wrap">
-		<a class="button-icon" href="bbw.html">
-			bookxcess / big bad wolf
-		</a>
-	</div>
-</div>
-	<div class="reveal4 tilt">
-		<img data-src="img/bbw1.jpg" class="bbw lazyload" id="bbw__image--1" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw2.jpg" class="bbw lazyload" id="bbw__image--2" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw3.jpg" class="bbw lazyload" id="bbw__image--3" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw4.jpg" class="bbw lazyload" id="bbw__image--4" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw5.jpg" class="bbw lazyload" id="bbw__image--5" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw6.jpg" class="bbw lazyload" id="bbw__image--6" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw7.jpg" class="bbw lazyload" id="bbw__image--7" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw8.jpg" class="bbw lazyload" id="bbw__image--8" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw9.jpg" class="bbw lazyload" id="bbw__image--9" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw10.jpg" class="bbw lazyload" id="bbw__image--10" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw11.jpg" class="bbw lazyload" id="bbw__image--11" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw12.jpg" class="bbw lazyload" id="bbw__image--12" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw13.jpg" class="bbw lazyload" id="bbw__image--13" alt="Big Bad Wolf & BookXcess" />
-		<img data-src="img/bbw14.jpg" class="bbw lazyload" id="bbw__image--14" alt="Big Bad Wolf & BookXcess" />
-	</div>
-
-	<div id="trigger5"></div>
-	<div class="block">
-		<div class="icon-wrap">
-		<a class="button-icon" href="publication.html">
-			publication
-		</a>
-	</div>
-	</div>
-	<div class="reveal5 tilt">
-		<img data-src="img/publication1.jpg" class="publication lazyload" id="publication__image--1" alt="publication" />
-		<img data-src="img/publication2.jpg" class="publication lazyload" id="publication__image--2" alt="publication" />
-		<img data-src="img/publication3.jpg" class="publication lazyload" id="publication__image--3" alt="publication" />
-		<img data-src="img/publication4.jpg" class="publication lazyload" id="publication__image--4" alt="publication" />
-		<img data-src="img/publication5.jpg" class="publication lazyload" id="publication__image--5" alt="publication" />
-		<img data-src="img/publication6.jpg" class="publication lazyload" id="publication__image--6" alt="publication" />
-		<img data-src="img/publication7.jpg" class="publication lazyload" id="publication__image--7" alt="publication" />
-		<img data-src="img/publication8.jpg" class="publication lazyload" id="publication__image--8" alt="publication" />
-		<img data-src="img/publication9.jpg" class="publication lazyload" id="publication__image--9" alt="publication" />
-		<img data-src="img/publication10.jpg" class="publication lazyload" id="publication__image--10" alt="publication" />
-		<img data-src="img/publication11.jpg" class="publication lazyload" id="publication__image--11" alt="publication" />
-		<img data-src="img/publication12.jpg" class="publication lazyload" id="publication__image--12" alt="publication" />
-		<img data-src="img/publication13.jpg" class="publication lazyload" id="publication__image--13" alt="publication" />
-		<img data-src="img/publication14.jpg" class="publication lazyload" id="publication__image--14" alt="publication" />
-	</div>
-
-	<div id="trigger6"></div>
-	<div class="block">
-		<div class="icon-wrap">
-		<a class="button-icon" href="accha.html">
-			accha
-		</a>
+		<!-- <div id="trigger"></div> -->
+		<div class="reveal">
+			<img data-src="img/jtc1.jpg" class="lazyload" id="jtc__image--1" alt="Jack The Clipper" />
+			<img data-src="img/jtc2.jpg" class="lazyload" id="jtc__image--2" alt="Jack The Clipper" />
+			<img data-src="img/jtc3.jpg" class="lazyload" id="jtc__image--3" alt="Jack The Clipper" />
+			<img data-src="img/jtc4.jpg" class="lazyload" id="jtc__image--4" alt="Jack The Clipper" />
+			<img data-src="img/jtc5.jpg" class="lazyload" id="jtc__image--5" alt="Jack The Clipper" />
+			<img data-src="img/jtc6.jpg" class="lazyload" id="jtc__image--6" alt="Jack The Clipper" />
+			<img data-src="img/jtc7.jpg" class="lazyload" id="jtc__image--7" alt="Jack The Clipper" />
+			<img data-src="img/jtc8.jpg" class="lazyload" id="jtc__image--8" alt="Jack The Clipper" />
+			<img data-src="img/jtc9.jpg" class="lazyload" id="jtc__image--9" alt="Jack The Clipper" />
+			<img data-src="img/sagoo1.jpg" class="lazyload" id="sagoo__image--1" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo2.jpg" class="lazyload" id="sagoo__image--2" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo3.jpg" class="lazyload" id="sagoo__image--3" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo4.jpg" class="lazyload" id="sagoo__image--4" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo5.jpg" class="lazyload" id="sagoo__image--5" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo6.jpg" class="lazyload" id="sagoo__image--6" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo7.jpg" class="lazyload" id="sagoo__image--7" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo8.jpg" class="lazyload" id="sagoo__image--8" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/sagoo9.jpg" class="lazyload" id="sagoo__image--9" alt="Sagoo Restaurant Bandung" />
+			<img data-src="img/tremors1.jpg" class="lazyload" id="tremors__image--1" alt="Tremors Photography" />
+			<img data-src="img/tremors2.jpg" class="lazyload" id="tremors__image--2" alt="Tremors Photography" />
+			<img data-src="img/tremors3.jpg" class="lazyload" id="tremors__image--3" alt="Tremors Photography" />
+			<img data-src="img/tremors4.jpg" class="lazyload" id="tremors__image--4" alt="Tremors Photography" />
+			<img data-src="img/tremors5.jpg" class="lazyload" id="tremors__image--5" alt="Tremors Photography" />
+			<img data-src="img/tremors6.jpg" class="lazyload" id="tremors__image--6" alt="Tremors Photography" />
+			<img data-src="img/tremors7.jpg" class="lazyload" id="tremors__image--7" alt="Tremors Photography" />
+			<img data-src="img/tremors8.jpg" class="lazyload" id="tremors__image--8" alt="Tremors Photography" />
+			<img data-src="img/tremors9.jpg" class="lazyload" id="tremors__image--9" alt="Tremors Photography" />
+			<img data-src="img/tremors10.jpg" class="lazyload" id="tremors__image--10" alt="Tremors Photography" />
+			<img data-src="img/tremors11.jpg" class="lazyload" id="tremors__image--11" alt="Tremors Photography" />
+			<img data-src="img/tremors12.jpg" class="lazyload" id="tremors__image--12" alt="Tremors Photography" />
+			<img data-src="img/tremors13.jpg" class="lazyload" id="tremors__image--13" alt="Tremors Photography" />
+			<img data-src="img/tremors14.jpg" class="lazyload" id="tremors__image--14" alt="Tremors Photography" />
+			<img data-src="img/bbw1.jpg" class="lazyload" id="bbw__image--1" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw2.jpg" class="lazyload" id="bbw__image--2" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw3.jpg" class="lazyload" id="bbw__image--3" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw4.jpg" class="lazyload" id="bbw__image--4" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw5.jpg" class="lazyload" id="bbw__image--5" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw6.jpg" class="lazyload" id="bbw__image--6" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw7.jpg" class="lazyload" id="bbw__image--7" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw8.jpg" class="lazyload" id="bbw__image--8" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw9.jpg" class="lazyload" id="bbw__image--9" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw10.jpg" class="lazyload" id="bbw__image--10" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw11.jpg" class="lazyload" id="bbw__image--11" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw12.jpg" class="lazyload" id="bbw__image--12" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw13.jpg" class="lazyload" id="bbw__image--13" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/bbw14.jpg" class="lazyload" id="bbw__image--14" alt="Big Bad Wolf & BookXcess" />
+			<img data-src="img/publication1.jpg" class="lazyload" id="publication__image--1" alt="publication" />
+			<img data-src="img/publication2.jpg" class="lazyload" id="publication__image--2" alt="publication" />
+			<img data-src="img/publication3.jpg" class="lazyload" id="publication__image--3" alt="publication" />
+			<img data-src="img/publication4.jpg" class="lazyload" id="publication__image--4" alt="publication" />
+			<img data-src="img/publication5.jpg" class="lazyload" id="publication__image--5" alt="publication" />
+			<img data-src="img/publication6.jpg" class="lazyload" id="publication__image--6" alt="publication" />
+			<img data-src="img/publication7.jpg" class="lazyload" id="publication__image--7" alt="publication" />
+			<img data-src="img/publication8.jpg" class="lazyload" id="publication__image--8" alt="publication" />
+			<img data-src="img/publication9.jpg" class="lazyload" id="publication__image--9" alt="publication" />
+			<img data-src="img/publication10.jpg" class="lazyload" id="publication__image--10" alt="publication" />
+			<img data-src="img/publication11.jpg" class="lazyload" id="publication__image--11" alt="publication" />
+			<img data-src="img/publication12.jpg" class="lazyload" id="publication__image--12" alt="publication" />
+			<img data-src="img/publication13.jpg" class="lazyload" id="publication__image--13" alt="publication" />
+			<img data-src="img/publication14.jpg" class="lazyload" id="publication__image--14" alt="publication" />
+			<img data-src="img/accha1.jpg" class="lazyload" id="accha__image--1" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha2.jpg" class="lazyload" id="accha__image--2" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha3.jpg" class="lazyload" id="accha__image--3" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha4.jpg" class="lazyload" id="accha__image--4" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha5.jpg" class="lazyload" id="accha__image--5" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha6.jpg" class="lazyload" id="accha__image--6" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha7.jpg" class="lazyload" id="accha__image--7" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha8.jpg" class="lazyload" id="accha__image--8" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha9.jpg" class="lazyload" id="accha__image--9" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha10.jpg" class="lazyload" id="accha__image--10" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha11.jpg" class="lazyload" id="accha__image--11" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha12.jpg" class="lazyload" id="accha__image--12" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha13.jpg" class="lazyload" id="accha__image--13" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha14.jpg" class="lazyload" id="accha__image--14" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha15.jpg" class="lazyload" id="accha__image--15" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha16.jpg" class="lazyload" id="accha__image--16" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha17.jpg" class="lazyload" id="accha__image--17" alt="Accha Indian Restaurant Branding" />
+			<img data-src="img/accha18.jpg" class="lazyload" id="accha__image--18" alt="Accha Indian Restaurant Branding" />
 		</div>
-	</div>
-	<div class="reveal6 tilt">
-		<img data-src="img/accha1.jpg" class="accha lazyload" id="accha__image--1" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha2.jpg" class="accha lazyload" id="accha__image--2" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha3.jpg" class="accha lazyload" id="accha__image--3" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha4.jpg" class="accha lazyload" id="accha__image--4" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha5.jpg" class="accha lazyload" id="accha__image--5" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha6.jpg" class="accha lazyload" id="accha__image--6" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha7.jpg" class="accha lazyload" id="accha__image--7" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha8.jpg" class="accha lazyload" id="accha__image--8" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha9.jpg" class="accha lazyload" id="accha__image--9" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha10.jpg" class="accha lazyload" id="accha__image--10" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha11.jpg" class="accha lazyload" id="accha__image--11" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha12.jpg" class="accha lazyload" id="accha__image--12" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha13.jpg" class="accha lazyload" id="accha__image--13" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha14.jpg" class="accha lazyload" id="accha__image--14" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha15.jpg" class="accha lazyload" id="accha__image--15" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha16.jpg" class="accha lazyload" id="accha__image--16" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha17.jpg" class="accha lazyload" id="accha__image--17" alt="Accha Indian Restaurant Branding" />
-		<img data-src="img/accha18.jpg" class="accha lazyload" id="accha__image--18" alt="Accha Indian Restaurant Branding" />
-	</div>
+		<div class="block" id="trigger">
+			<div class="icon-wrap">
+				<a class="button-icon" href="jacktheclipper.html">
+					<h2>jack the clipper</h2>
+					<p>branding</p>
+				</a>
+			</div>
+		</div>
 
-	<div class="spacer"></div>
+		<div class="block">
+			<div class="icon-wrap">
+				<a class="button-icon" href="sagoo.html">
+					<h2>sagoo</h2>
+					<p>packaging</p>
+				</a>
+			</div>
+		</div>
+
+		<div class="block">
+			<div class="icon-wrap">
+				<a class="button-icon" href="tremors.html">
+					<h2>tremors</h2>
+					<p>conceptual photography</p>
+				</a>
+			</div>
+		</div>
+
+		<div class="block">
+			<div class="icon-wrap">
+				<a class="button-icon" href="bbw.html">
+				<h2>bookxcess / big bad wolf</h2>
+					<p>social media / animation</p>
+				</a>
+			</div>
+		</div>
+
+		<div class="block">
+			<div class="icon-wrap">
+				<a class="button-icon" href="publication.html">
+					<h2>well that's one way to put it</h2>
+					<p>publication</p>
+				</a>
+			</div>
+		</div>
+
+		<div class="block">
+			<div class="icon-wrap">
+				<a class="button-icon" href="accha.html">
+					<h2>accha</h2>
+					<p>branding / packaging</p>
+				</a>
+			</div>
+		</div>
+
+		<div class="spacer"></div>
+	</div>
+	<script src="Three.js"></script>
+	<script src="RequestAnimationFrame.js"></script>
 </body>
 
 </html>
