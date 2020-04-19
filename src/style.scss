@@ -32,14 +32,14 @@ body {
   cursor: none;
 }
 
-#horizontal {
-  overflow-y: hidden;
-}
+// #horizontal {
+//   overflow-y: hidden;
+// }
 
 #container {
   display: flex;
-  overflow-x: scroll;
-  overflow-y: hidden;
+  // overflow-x: scroll;
+  // overflow-y: hidden;
   white-space: nowrap;
   height: 100vh;
   // transform: translateZ(500px);
@@ -63,6 +63,7 @@ body {
   font-size: 340%;
   color: #fff;
   z-index: 1;
+  top: -5%;
 }
 
 #start {
@@ -118,7 +119,7 @@ p {
   position: fixed;
   left: 20px;
   top: 20px;
-  transform: translateZ(100px);
+  transform: translate(-50%, -50%), translateZ(100px);
   mix-blend-mode: difference;
   pointer-events: none;
   opacity: 1;
@@ -201,7 +202,7 @@ div[class*='reveal'].visible {
 header {
   position: fixed;
   width: 98%;
-  padding: 30px;
+  padding: 20px 30px;
   z-index: 3;
 }
 
@@ -218,12 +219,12 @@ a.button-text {
   float: left;
 }
 
-#icon-wrap-contact, #icon-wrap-works {
+.icon-wrap {
   position: absolute;
 }
 
-#icon-wrap-contact {
-  right: 55px;
+header .icon-wrap:last-child {
+  right: 80px;
   text-align: right;
 }
 
