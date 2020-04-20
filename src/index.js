@@ -26,63 +26,26 @@ import 'animation.gsap'
 // import { ScrollScene, ScrollMagic } from 'scrollscene'
 import 'lazysizes';
 //DEBUGGING!
-import 'debug.addIndicators'
+// import 'debug.addIndicators'
 
 /*--------------------
-Horizontal Scroll Plugin
+#noload checker
 --------------------*/
-class HorizontalScrollPlugin extends Scrollbar.ScrollbarPlugin {
-  static pluginName = 'horizontalScroll';
-
-  transformDelta(delta, fromEvent) {
-    if (!/wheel/.test(fromEvent.type)) {
-      return delta;
-    }
-    const { x, y } = delta; 
-
-    return {
-      y: 0,
-      x: Math.abs(x) > Math.abs(y) ? x : y, };
-    }
-  }
-  Scrollbar.use(HorizontalScrollPlugin);
-  let option = {
-    x: 0,
-    speed: 1.5,
-    limit: 2,
-    time: 0.3,
-  };
-
-/*--------------------
-Preloader
---------------------*/
-var p = 0;
-
-var siriWave = new SiriWave({
-  container: document.getElementById('preloader'),
-  autostart: true,
-  speed: 0.05,
-  amplitude: 0,
-  cover: true
-});
-var interval = setInterval(increment, 300);
-
-function increment() {
-  p = p + 0.01;
-  siriWave.setAmplitude(p)
-  //console.log(p) //DEBUGGING!
+// skip preloader if #noload
+function myHash() {
+  document.getElementById('preloader').setAttribute('id', 'preloader-fast');
 }
 
-/*--------------------
-Lazyload
---------------------*/
-window.lazySizesConfig = window.lazySizesConfig || {};
-// window.lazySizesConfig.customMedia = {
-//     '--small': '(max-width: 480px)',
-//     '--medium': '(max-width: 900px)',
-//     '--large': '(max-width: 1400px)',
-// };
-$('.lazy-others').addClass('jtc');
+function hash() {
+  var hash = location.hash;
+
+  switch(hash) {
+      case '#noload' : myHash();
+          break;
+      default : break;
+  }
+}
+hash();
 
 /*--------------------
 Check jQuery DEBUGGING!
@@ -114,27 +77,126 @@ navigator.sayswho = (function() {
   if ((tem = ua.match(/version\/(\d+)/i)) != null) M.splice(1, 1, tem[1]);
   return M.join(' ');
 })();
-const isChrome = /Chrome /.test(navigator.sayswho);
-console.log(navigator.sayswho, "Chrome?", isChrome);
+var isChrome = /Chrome /.test(navigator.sayswho);
+var isSafari = /Safari /.test(navigator.sayswho);
+console.log(navigator.sayswho, "Chrome?", isChrome, "Safari?", isSafari);
 
+//document ready
 $(document).ready(function() {
+/*--------------------
+Preloader
+--------------------*/
+  let p = 0;
 
-  // Check if mobile
-  function isMobile() {
-    return (typeof window.orientation !== "undefined") || (navigator.userAgent.indexOf('IEMobile') !== -1);
+  var siriWave = new SiriWave({
+    container: document.getElementById('preloader'),
+    autostart: true,
+    speed: 0.05,
+    amplitude: 0,
+    cover: true
+  });
+  
+  let interval = setInterval(increment, 300);
+  
+  function increment() {
+    p = p + 0.01;
+    siriWave.setAmplitude(p)
+    console.log(p) //DEBUGGING!
   }
 
-  if (isMobile()) {
-    var controller = new ScrollMagic.Controller({});
-
-  } else {
+/*--------------------
+Lazyload
+--------------------*/
+window.lazySizesConfig = window.lazySizesConfig || {};
+// window.lazySizesConfig.customMedia = {
+//     '--small': '(max-width: 480px)',
+//     '--medium': '(max-width: 900px)',
+//     '--large': '(max-width: 1400px)',
+// };
+$('.lazy-others').addClass('jtc');
 
 /*--------------------
-Horizontal Scroll
+Mobile Checker
 --------------------*/
-    // new HorizontalScroll({
-    //   // container: document.querySelector('#container')
-    // });
+
+  // Mobile
+
+      if ($(window).width() < 480) {
+    console.log("mobile view mode");
+    var controller = new ScrollMagic.Controller({
+      // refreshInterval: 0
+    });
+    $(window).resize(function() {
+      if ($(window).width() >= 480) {
+        location.reload();
+        console.log("rotated to landscape");
+      }
+    }
+  )};
+
+// landscape mobile
+  let scaled = false
+  if ($(window).height() < 480) {
+    let viewport = document.querySelector("meta[name=viewport]");
+    viewport.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=no');
+    scaled = true;
+    $("#ball").hide();
+  };
+
+  $(window).resize(function() {
+    console.log("scaled: " + scaled + ", width: " + $(window).width()); //DEBUGGING!
+  });
+
+
+// desktop
+  if ($(window).width() >= 480 || ($(window).width() >= 960 && scaled == true)) {
+    console.log("desktop mode");
+    $(window).resize(function() {
+      if ($(window).width() < 480 || ($(window).width() < 960 && scaled == true)) {
+        location.reload();
+        console.log("rotated to portrait");
+      };
+  });
+/*--------------------
+Horizontal Scroll Plugin
+--------------------*/
+class HorizontalScrollPlugin extends Scrollbar.ScrollbarPlugin {
+  static pluginName = 'horizontalScroll';
+
+  transformDelta(delta, fromEvent) {
+    if (!/wheel/.test(fromEvent.type)) {
+      return delta;
+    }
+    const { x, y } = delta; 
+
+    return {
+      y: 0,
+      x: Math.abs(x) > Math.abs(y) ? x : y, };
+    }
+  }
+  Scrollbar.use(HorizontalScrollPlugin);
+  let option = {
+    x: 0,
+    speed: 1.5,
+    limit: 2,
+    time: 0.3,
+  };
+
+/*--------------------
+Safari Fix
+--------------------*/
+let ball = document.getElementById('ball');
+
+if (isSafari == true ) {
+  console.log("applying Safari Fix");
+  TweenLite.set(ball, {
+      transform: "translate(-50%, -50%) translateZ(100px)"
+  });
+  TweenLite.set("#magic-cursor", {
+      transformStyle: "preserve-3d",
+      transform: "translateZ(200px)"
+  });
+};
 
 /*--------------------
 Custom Cursor
@@ -149,11 +211,11 @@ Custom Cursor
     };
     var ratio = 0.7;
     var active = false;
-    let ball = document.getElementById('ball');
 
-    TweenLite.set('#ball', {
-      xPercent: -50,
-      yPercent: -50
+    TweenLite.set(ball, {
+      scale: 0.25,
+      xPercent: -67,
+      yPercent: -65
     });
 
     $(window).mouseleave(function() {
@@ -189,9 +251,11 @@ Magnet Cursor
 --------------------*/
 
     //general .icon-wrap
+
     $(".icon-wrap").mouseenter(function(e) {
       TweenMax.to(ball, 0.3, {
-        scale: 4
+        scale: 1,
+        mixBlendMode: "difference",
        });
       active = true;
       });
@@ -201,13 +265,17 @@ Magnet Cursor
         scale: 1
       });
       TweenMax.to(ball, 0.3, {
-        scale: 1
+        scale: 0.25,
+        mixBlendMode: "difference",
       });
       TweenMax.to(this.querySelector(".button-icon"), 0.3, {
         x: 0,
         y: 0
        });
-       active = false;
+       TweenMax.to("circle", 0.3, {
+        fill: "#f7f8fa"
+      })
+      active = false;
     });
 
     // //#icon-wrap-works
@@ -290,6 +358,15 @@ Magnet Cursor
         y: pos.y
       });
     }
+
+/*--------------------
+ScrollMagic Controller
+--------------------*/
+    var controller = new ScrollMagic.Controller({
+      // refreshInterval: 0,
+      vertical: false,
+      loglevel: 3 //DEBUGGING!
+    })
   } //end of 'if mobile'
 
 /*--------------------
@@ -310,7 +387,7 @@ Tilt with GSAP
     TweenMax.to(selector, 1, {
       rotationY: -0.15 * sxPos,
       rotationX: -0.20 * syPos,
-      translateZ: 10,
+      translateZ: "-100px",
       transformPerspective: 1000,
       transformOrigin: 'center center'
     });
@@ -370,8 +447,8 @@ Three.js Canvas
         down: false
       },
       world = {
-        width: window.innerWidth,
-        height: window.innerHeight
+        width: window.innerwidth,
+        height: window.innerheight
       },
       camera, scene, renderer, uniforms, container;
 
@@ -447,11 +524,6 @@ Three.js Canvas
 /*--------------------
 ScrollMagic & GSAP
 --------------------*/
-  var controller = new ScrollMagic.Controller({
-    refreshInterval: 0,
-    vertical: false,
-    loglevel: 3 //DEBUGGING!
-  })
 
   var images = [
     "jtc__image--1",
@@ -546,7 +618,7 @@ ScrollMagic & GSAP
     immediateRender: false,
     ease: Linear.easeNone,
     onUpdate: function() {
-      var elements = document.getElementsByClassName('lazyloaded');
+      var elements = document.getElementsByClassName('curimg');
       for (var i = 0; i < elements.length; i++) {
         elements[i].style.visibility = 'hidden';
         console.log("okay i'm hiding now"); //DEBUGGING!
@@ -556,30 +628,26 @@ ScrollMagic & GSAP
   });
   scenes.push(new ScrollMagic.Scene({
     triggerElement: "#trigger",
-    duration: "480%"
+    duration: "600%"
   })
   .setTween(tween)
   .setClassToggle(".reveal", "visible")
-  .addIndicators() //DEBUGGING!
+  // .addIndicators() //DEBUGGING!
   .addTo(controller)
   );
 
-  //chrome optimization
-  if(isChrome){
-    controller.scrollPos(function () {
-      return x;
-    });
-  }
 /*--------------------
 Smooth Scrollbar
 --------------------*/
-// intialize scrollbar
-let scrollbar = Scrollbar.init(document.querySelector('#smoothscrollbar'), {damping: '0.2'});
 
 // add listener to refresh the scene manually
 // scrollbar.addListener(() => {
 //   imagesScene.refresh()
 // })
+    // intialize scrollbar
+    let scrollbar = Scrollbar.init(document.querySelector('#smoothscrollbar'), {
+      damping: '0.2'
+    });
 
   // listener smooth-scrollbar, update controller
 scrollbar.addListener(function(status) {
@@ -595,11 +663,34 @@ scrollbar.addListener(function(status) {
   }
   
 });
+$(".scrollbar-track").remove();
+
+/*--------------------
+href
+--------------------*/
+
+$(".button-icon").click(function(e){
+  e.preventDefault();
+  var url = $(this).attr('href');
+  TweenMax.to("circle", 0.7, {
+    fill: "black"
+  }, 0.1)
+  TweenMax.to('#ball', 0.5, {
+    scale: 100,
+    mixBlendMode: "initial",
+    display: "initial",
+    ease:Back.easeIn,
+    onComplete: function(){
+         window.location.href = url;                                           
+    }
+ }, 0.1);
+});
+
 /*--------------------
 Remove Preloader
 --------------------*/
   setTimeout(function() {
-    $("#preloader").fadeOut(1000, function() {
+    $("[id^=preloader], [id*=preloader]").fadeOut(2000, function() {
       $(this).remove();
     })
   }, 3000);
