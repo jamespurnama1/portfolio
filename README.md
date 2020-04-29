@@ -8,10 +8,15 @@ This is a personal portfolio project at jameshenry.site
 `npm install`
 3. Build the project:
 `npm run build`
+
+
 or alternatively test build in webpack development mode
 `npm run test`	
+
+
 you can also open a live server port
 `npm run start`
+
 
 ## Features
 
