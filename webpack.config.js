@@ -3,9 +3,15 @@ var webpack = require("webpack");
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.js',
+  entry: {
+    index: './src/index.js',
+    jtc: './src/jtc.js',
+    sagoo: './src/sagoo.js',
+    tremors: './src/tremors.js',
+    bbw: './src/bbw.js',
+  },
   output: {
-    filename: 'main.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
     library: "my-library",
     libraryTarget: "umd"
@@ -46,11 +52,12 @@ module.exports = {
        ],
      },
       {
-        test: /\.(png|svg|jpe?g|gif|ico)$/i,
+        test: /\.(png|svg|jpe?g|gif|ico|webm|webp)$/i,
         use: [{
           loader: 'file-loader',
           options: {
-            name: '/img/[name].[ext]',
+            name: '[path][name].[ext]',
+            context: './src/'
           },
         }, ]
       },
