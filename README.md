@@ -5,17 +5,23 @@ This is a personal portfolio project at jameshenry.site
 ## Building
 1. Clone the repository
 2. Initialize NPM:
-`npm install`
+
+
+&nbsp;&nbsp;`npm install`
+
 3. Build the project:
-`npm run build`
+
+&nbsp;&nbsp;`npm run build`
 
 
-or alternatively test build in webpack development mode
-`npm run test`	
+&nbsp;&nbsp;or alternatively test build in webpack development mode
+
+&nbsp;&nbsp;`npm run test`	
 
 
-you can also open a live server port
-`npm run start`
+&nbsp;&nbsp;you can also open a live server port
+
+&nbsp;&nbsp;`npm run start`
 
 
 ## Features
